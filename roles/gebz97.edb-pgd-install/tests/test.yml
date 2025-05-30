@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - gebz97.edb-02-epe-install
+    - gebz97.edb-pgd-install
