@@ -6,6 +6,7 @@ edb_data_dir: /opt/edb/data
 edb_initdb_encoding: "UTF-8"
 edb_initdb_locale: "en_US.UTF-8"
 edb_initdb_user: "dba"
+edb_superuser_pwfile_path: /tmp/edb-superuser-pwfile
 edb_initdb_redwood_compat: false
 edb_initdb_redwood_like: false
 edb_initdb_icu: false
