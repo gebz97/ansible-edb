@@ -1,0 +1,16 @@
+---
+- name: Setup EDB Cluster
+  hosts: edb_pg_nodes
+  become: true
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - name: Setup Repo Roll
+      role: roles/gebz97.edb-repo-setup
+
+    - name: Install EPAS 17 packages
+      role: roles/gebz97.edb-epas-17-install
+
+    - name: Run the INITDB Step
+      role: roles/gebz97.edb-epas-17-initdb

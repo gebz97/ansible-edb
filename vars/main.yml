@@ -1,0 +1,12 @@
+satellite_rhel_8_cmd:
+satellite_rhel_9_cmd:
+edb_repo_baseurl: "http://192.168.1.66/repos/edb/enterprisedb-enterprise/"
+satellite_enroll: False
+edb_data_dir: /opt/edb/data
+edb_initdb_encoding: "UTF-8"
+edb_initdb_locale: "en_US.UTF-8"
+edb_initdb_user: "dba"
+edb_initdb_redwood_compat: false
+edb_initdb_redwood_like: false
+edb_initdb_icu: false
+edb_initdb_extra_opts: ""

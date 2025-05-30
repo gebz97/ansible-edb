@@ -1,0 +1,39 @@
+---
+- name: Ensure data directory exists
+  ansible.builtin.file:
+    path: "{{ edb_data_dir }}"
+    state: directory
+    owner: enterprisedb
+    group: enterprisedb
+
+- name: Check if data directory is empty
+  ansible.builtin.command: test -z "$(ls -A {{ edb_data_dir }})"
+  register: is_data_dir_empty
+  ignore_errors: true
+  changed_when: false
+
+- name: EDB Superuser password file
+  ansible.builtin.template:
+    src: templates/pwfile.j2
+    dest: "{{ edb_superuser_pwfile_path }}"
+    mode: 0600
+
+- name: Construct INITDB options
+  set_fact:
+    edb_initdb_opts: >-
+      {{ edb_initdb_redwood_compat | ternary('', '--no-redwood-compat') }}
+      {{ edb_initdb_redwood_like | ternary('--redwood-like', '') }}
+      {{ edb_initdb_icu | ternary('--icu-short-form', '') }}
+      -E {{ edb_initdb_encoding }}
+      --locale={{ edb_initdb_locale }}
+      -U {{ edb_initdb_user }}
+      --pwfile={{ edb_superuser_pwfile_path }}
+      {{ edb_initdb_extra_opts }}
+
+- name: Run initdb
+  ansible.builtin.command: /usr/edb/as17/bin/edb-as-17-setup initdb
+  environment:
+    PGSETUP_INITDB_OPTIONS: "{{ edb_initdb_opts }}"
+  become: true
+  become_user: enterprisedb
+  when: is_data_dir_empty.rc == 0
