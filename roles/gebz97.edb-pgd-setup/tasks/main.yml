@@ -1,2 +1,11 @@
 ---
-# tasks file for gebz97.edb-pgd-setup
+- name: Create .pgpass file
+  ansible.builtin.copy:
+    dest: "{{ edb_data_dir }}/.pgpass"
+    content: |
+      {% for line in bdr_pgpass_entries %}
+      {{ line }}
+      {% endfor %}
+    owner: "{{ bdr_pg_user }}"
+    group: "{{ bdr_pg_user }}"
+    mode: '0600'

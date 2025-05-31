@@ -13,12 +13,17 @@
     - ansible_distribution_major_version == "8"
   ansible.builtin.shell: "{{ satellite_rhel_8_cmd  }}"
   
-- name: Regular Repo Setup
+- name: Regular Repo Setup for RHEL 9
   when:
     - not satellite_enroll
     - ansible_os_family == "RedHat"
-    - ansible_distribution_major_version == "8" or "9"
+    - ansible_distribution_major_version == "9"
+  loop: 
+    - src: templates/edb-el9.j2
+      dest: /etc/yum.repos.d/enterprisedb-edb.repo      
+    - src: templates/pgd-el9.j2
+      dest: /etc/yum.repos.d/enterprisedb-pgd.repo
   ansible.builtin.template:
-    src: templates/edb.j2
-    dest: /etc/yum.repos.d/enterprisedb-edb.repo
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     backup: true

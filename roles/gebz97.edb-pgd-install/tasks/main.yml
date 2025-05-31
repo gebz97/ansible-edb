@@ -1,2 +1,39 @@
 ---
-# tasks file for gebz97.edb-pgd-install
+- name: Install PostgreSQL Distributed Packages for EPAS 17
+  ansible.builtin.dnf:
+    name:
+      - edb-bdr5-epas17
+      - edb-pgd5-proxy
+      - edb-pgd5-cli
+
+- name: Ensure bdr is included in shared_preload_libraries
+  loop:
+    - regexp: '^shared_preload_libraries'
+      line: "shared_preload_libraries = '$libdir/dbms_pipe,$libdir/edb_gen,$libdir/dbms_aq,$libdir/bdr'"
+    - regexp: '^wal_level'
+      line: "wal_level = 'logical'"
+    - regexp: '^track_commit_timestamp'
+      line: "track_commit_timestamp = 'on'"
+    - regexp: '^max_worker_processes'
+      line: "max_worker_processes = '{{ bdr_max_worker_processes }}'"
+  ansible.builtin.lineinfile:
+    path: "{{ edb_data_dir }}/postgresql.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertafter: EOF
+    backup: true
+
+- name: Ensure replication and client access in pg_hba.conf
+  ansible.builtin.blockinfile:
+    path: "{{ edb_data_dir }}/pg_hba.conf"
+    block: |
+      host all all all md5
+      host replication all all md5
+    marker: "# {mark} BDR configuration block"
+    insertbefore: BOF
+    backup: true
+  
+- name: Ensure EDB EPAS service is restarted
+  ansible.builtin.service:
+    name: edb-as-17
+    state: restarted

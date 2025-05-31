@@ -1,4 +1,4 @@
 **/files/*
 .vault-pass
-**/vault/*
+**/vault/main.yml
 facts.txt

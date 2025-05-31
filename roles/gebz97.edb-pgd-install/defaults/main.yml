@@ -1,2 +1,2 @@
 ---
-# defaults file for gebz97.edb-pgd-install
+bdr_max_worker_processes: 16

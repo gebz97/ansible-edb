@@ -15,3 +15,6 @@
 
     - name: Run the INITDB Step
       role: roles/gebz97.edb-epas-17-initdb
+
+    - name: Install PGD on all nodes
+      role: roles/gebz97.edb-pgd-install

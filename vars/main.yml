@@ -1,6 +1,7 @@
 satellite_rhel_8_cmd:
 satellite_rhel_9_cmd:
 edb_repo_baseurl: "http://192.168.1.66/repos/edb/enterprisedb-enterprise/"
+edb_pgd_repo_baseurl: "http://192.168.1.66/repos/edb/enterprisedb-distributed/"
 satellite_enroll: False
 edb_data_dir: /opt/edb/data
 edb_initdb_encoding: "UTF-8"

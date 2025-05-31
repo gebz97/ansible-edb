@@ -1,0 +1,7 @@
+edb_superuser_password: "changeme"
+bdr_user: "bdr"
+bdr_password: "changeme"
+pgpass_entries:
+  - "<host>:<port>:<database>:{{ bdr_user }}:{{ bdr_password }}"
+  - "<host>:<port>:<database>:{{ bdr_user }}:{{ bdr_password }}"
+  - "<host>:<port>:<database>:{{ bdr_user }}:{{ bdr_password }}"
