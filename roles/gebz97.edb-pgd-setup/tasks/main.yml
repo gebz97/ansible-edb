@@ -1,11 +1,33 @@
 ---
+- name: Ensure BDR user is created
+  delegate_to: localhost
+  community.postgresql.postgresql_user:
+    login_db: postgres
+    name: "{{ bdr_pg_user }}"
+    password: "{{ bdr_pg_password }}"
+    login_user: "{{ edb_superuser }}"
+    login_password: "{{ edb_superuser_password }}"
+    login_host: "{{ ansible_default_ipv4.address }}"
+    login_port: "{{ edb_port }}"
+  
+- name: Ensure OS bdr group
+  ansible.builtin.group:
+    name: "{{ bdr_os_group }}"
+
+- name: Ensure OS bdr user exists
+  ansible.builtin.user:
+    name: "{{ bdr_os_user }}"
+    group: "{{ bdr_os_group }}"
+    password: "{{ bdr_os_user_password | password_hash('sha512') }}"
+    update_password: on_create
+
 - name: Create .pgpass file
   ansible.builtin.copy:
-    dest: "{{ edb_data_dir }}/.pgpass"
+    dest: "{{ edb_root_dir }}/.pgpass"
     content: |
       {% for line in bdr_pgpass_entries %}
       {{ line }}
       {% endfor %}
-    owner: "{{ bdr_pg_user }}"
-    group: "{{ bdr_pg_user }}"
+    owner: "{{ bdr_os_user }}"
+    group: "{{ bdr_os_group }}"
     mode: '0600'

@@ -1,2 +1,5 @@
 ---
 # defaults file for gebz97.edb-pgd-setup
+bdr_pg_user: "bdr"
+bdr_os_user: "bdr"
+bdr_os_group: "bdr"
